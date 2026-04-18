@@ -202,6 +202,13 @@ const publicQueries = {
         businessName: string | null; payid: string | null; found: boolean | null;
       } | null;
     }>,
+  getFoundingMemberStatus: () =>
+    (_publicClient as any).queries.getFoundingMemberStatus() as Promise<{
+      data: {
+        enabled: boolean | null; claimed: number | null; limit: number | null;
+        available: number | null; error: string | null;
+      } | null;
+    }>,
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

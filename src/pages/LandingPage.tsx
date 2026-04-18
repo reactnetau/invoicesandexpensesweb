@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Receipt, BarChart2, Globe, Mail, Check, ArrowRight, Zap } from 'lucide-react';
+import { FileText, Receipt, BarChart2, Mail, Check, ArrowRight, Zap, Star } from 'lucide-react';
 import { SEO } from '../components/SEO';
+import { publicClient } from '../lib/api';
 
 const APP_URL = import.meta.env.VITE_APP_URL ?? '';
 
@@ -62,7 +64,7 @@ const features = [
   {
     icon: FileText,
     title: 'Send polished invoices',
-    desc: 'Create client-ready invoices with public payment links and email delivery.',
+    desc: 'Create client-ready invoices with clean PDFs and email delivery.',
   },
   {
     icon: Receipt,
@@ -73,11 +75,6 @@ const features = [
     icon: BarChart2,
     title: 'Know your numbers',
     desc: 'Track income, expenses, and net profit for any financial year.',
-  },
-  {
-    icon: Globe,
-    title: 'Public invoice links',
-    desc: 'Every invoice gets a unique URL you can share — no login required to view.',
   },
   {
     icon: Mail,
@@ -97,7 +94,45 @@ const ACTIVITY = [
   { title: 'Client added', meta: 'Aster Studio', dot: 'bg-amber-500' },
 ];
 
+type FoundingStatus = {
+  claimed: number;
+  limit: number;
+  available: number;
+};
+
 export function LandingPage() {
+  const [foundingStatus, setFoundingStatus] = useState<FoundingStatus | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadFoundingStatus() {
+      try {
+        const result = await publicClient.queries.getFoundingMemberStatus();
+        const data = result.data;
+        if (
+          !cancelled &&
+          data?.enabled &&
+          typeof data.claimed === 'number' &&
+          typeof data.limit === 'number' &&
+          typeof data.available === 'number' &&
+          data.claimed < data.limit
+        ) {
+          setFoundingStatus({
+            claimed: data.claimed,
+            limit: data.limit,
+            available: data.available,
+          });
+        }
+      } catch {
+        if (!cancelled) setFoundingStatus(null);
+      }
+    }
+
+    void loadFoundingStatus();
+    return () => { cancelled = true; };
+  }, []);
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
       <SEO
@@ -150,6 +185,31 @@ export function LandingPage() {
           </Link>
         </div>
         <p className="text-sm text-gray-400">No credit card required · 5 free invoices/month</p>
+
+        {foundingStatus && (
+          <div className="mt-6 mx-auto max-w-md rounded-card border border-amber-200 bg-white p-4 shadow-card text-left">
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border border-amber-200 bg-amber-50">
+                <Star className="h-4 w-4 text-amber-600" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-sm font-bold text-gray-900">Founding memberships</p>
+                  <p className="text-xs font-semibold text-amber-700">{foundingStatus.available} left</p>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
+                  <div
+                    className="h-full rounded-full bg-amber-500"
+                    style={{ width: `${Math.min((foundingStatus.claimed / foundingStatus.limit) * 100, 100)}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-xs text-gray-500">
+                  {foundingStatus.claimed}/{foundingStatus.limit} claimed. Founding members get permanent Pro free.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ── Stats band ── */}
@@ -226,7 +286,7 @@ export function LandingPage() {
               name="Free"
               price="$0"
               period="forever"
-              features={['5 invoices per month', 'Unlimited expenses', 'Unlimited clients', 'Public invoice links', 'PDF invoice download']}
+              features={['5 invoices per month', 'Unlimited expenses', 'Unlimited clients', 'PDF invoice download']}
             />
             <PricingCard
               name="Pro"
@@ -236,9 +296,11 @@ export function LandingPage() {
               highlighted
             />
           </div>
-          <p className="text-center text-sm text-gray-400 mt-6">
-            First 50 users get permanent Pro free as founding members.
-          </p>
+          {foundingStatus && (
+            <p className="text-center text-sm text-gray-400 mt-6">
+              {foundingStatus.available} founding memberships left for permanent Pro free.
+            </p>
+          )}
         </div>
       </section>
 
