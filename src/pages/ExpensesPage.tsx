@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Trash2, Receipt, X } from 'lucide-react';
-import { client, type Expense } from '../lib/api';
+import { client, logActivity, type Expense } from '../lib/api';
 import { useProfile } from '../hooks/useProfile';
 import { formatCurrency, formatDate, EXPENSE_CATEGORIES } from '../lib/format';
 import { ConfirmModal } from '../components/ConfirmModal';
@@ -46,10 +46,15 @@ export function ExpensesPage() {
     if (isNaN(amt) || amt <= 0) { enqueueSnackbar('Enter a valid amount', { variant: 'error' }); return; }
     setSaving(true);
     try {
-      await client.models.Expense.create({
+      const result = await client.models.Expense.create({
         category: form.category,
         amount: amt,
         date: new Date(form.date).toISOString(),
+      });
+      logActivity('expense_created', 'Expense added', {
+        description: `${form.category} · ${formatCurrency(amt, currency)}`,
+        entityType: 'Expense',
+        entityId: result.data?.id ?? undefined,
       });
       enqueueSnackbar('Expense added', { variant: 'success' });
       setFormOpen(false);

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard, FileText, Receipt, Users,
+  LayoutDashboard, FileText, Receipt, Users, Activity,
   Settings, User, LogOut, Menu, X,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,6 +12,7 @@ const navItems = [
   { to: '/invoices',  icon: FileText,        label: 'Invoices' },
   { to: '/expenses',  icon: Receipt,         label: 'Expenses' },
   { to: '/clients',   icon: Users,           label: 'Clients' },
+  { to: '/snapshot',  icon: Activity,        label: 'Snapshot' },
 ];
 
 const bottomItems = [

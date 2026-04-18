@@ -3,7 +3,7 @@ import {
   Plus, Trash2, FileText, X, Link2, CheckCircle, Circle,
   Mail, Eye, Send,
 } from 'lucide-react';
-import { client, isPro, type Invoice, type Client } from '../lib/api';
+import { client, isPro, logActivity, type Invoice, type Client } from '../lib/api';
 import { useProfile } from '../hooks/useProfile';
 import { formatCurrency, formatDate } from '../lib/format';
 import { ConfirmModal } from '../components/ConfirmModal';
@@ -123,6 +123,12 @@ export function InvoicesPage() {
         enqueueSnackbar(result.data.error, { variant: 'error' });
         return;
       }
+
+      logActivity('invoice_created', 'Invoice created', {
+        description: `Invoice for ${form.clientName} · ${formatCurrency(amt, currency)}`,
+        entityType: 'Invoice',
+        entityId: result.data?.id ?? undefined,
+      });
 
       if (result.data?.emailSent) {
         enqueueSnackbar('Invoice created and email sent', { variant: 'success' });

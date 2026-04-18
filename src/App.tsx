@@ -17,6 +17,7 @@ import { ExpensesPage } from './pages/ExpensesPage';
 import { ClientsPage } from './pages/ClientsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { AccountPage } from './pages/AccountPage';
+import { SnapshotPage } from './pages/SnapshotPage';
 
 // Public pages
 import { LandingPage } from './pages/LandingPage';
@@ -74,6 +75,7 @@ function AppRoutes() {
         <Route path="/clients" element={<ClientsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/snapshot" element={<SnapshotPage />} />
       </Route>
 
       {/* Fallback */}

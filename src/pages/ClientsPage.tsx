@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Pencil, Trash2, Users, X, Check } from 'lucide-react';
-import { client, type Client } from '../lib/api';
+import { client, logActivity, type Client } from '../lib/api';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { enqueueSnackbar } from 'notistack';
@@ -67,12 +67,17 @@ export function ClientsPage() {
         });
         enqueueSnackbar('Client updated', { variant: 'success' });
       } else {
-        await client.models.Client.create({
+        const result = await client.models.Client.create({
           name: form.name,
           email: form.email || undefined,
           phone: form.phone || undefined,
           company: form.company || undefined,
           address: form.address || undefined,
+        });
+        logActivity('client_created', 'Client added', {
+          description: form.name,
+          entityType: 'Client',
+          entityId: result.data?.id ?? undefined,
         });
         enqueueSnackbar('Client added', { variant: 'success' });
       }

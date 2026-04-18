@@ -67,6 +67,17 @@ export interface Expense {
   updatedAt?: string | null;
 }
 
+export interface ActivityEvent {
+  id: string;
+  type: string;
+  title: string;
+  description?: string | null;
+  entityType?: string | null;
+  entityId?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+}
+
 export function isPro(
   profile: Pick<UserProfile, 'subscriptionStatus' | 'isFoundingMember'>
 ): boolean {
@@ -123,6 +134,11 @@ const models = {
       (_client as any).models.Expense.create(input) as Promise<ItemResult<Expense>>,
     delete: (input: { id: string }) =>
       (_client as any).models.Expense.delete(input) as Promise<ItemResult<Expense>>,
+  },
+  ActivityEvent: {
+    list: () => (_client as any).models.ActivityEvent.list({ limit: 1000 }) as Promise<ListResult<ActivityEvent>>,
+    create: (input: Omit<ActivityEvent, 'id' | 'createdAt' | 'updatedAt'>) =>
+      (_client as any).models.ActivityEvent.create(input) as Promise<ItemResult<ActivityEvent>>,
   },
 };
 
@@ -217,3 +233,12 @@ export const client = { models, mutations, queries };
 
 /** Unauthenticated client for public invoice lookup. */
 export const publicClient = { queries: publicQueries };
+
+/** Fire-and-forget activity event logger. Never throws. */
+export function logActivity(
+  type: string,
+  title: string,
+  opts?: { description?: string; entityType?: string; entityId?: string }
+) {
+  client.models.ActivityEvent.create({ type, title, ...opts }).catch(() => {});
+}
