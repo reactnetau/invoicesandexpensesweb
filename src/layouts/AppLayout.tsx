@@ -41,7 +41,7 @@ export function AppLayout() {
   };
 
   const Sidebar = ({ mobile = false }: { mobile?: boolean }) => (
-    <nav className={`flex flex-col h-full ${mobile ? 'pt-2' : ''}`}>
+    <nav className={`flex min-h-0 flex-col h-full ${mobile ? 'pt-2' : ''}`}>
       {/* Brand */}
       <div className="px-4 py-5 flex items-center gap-2.5 border-b border-gray-100">
         <img src="/schmappslogo.png" alt="Schmapps logo" className="w-8 h-8 rounded-[10px] object-cover" />
@@ -67,11 +67,14 @@ export function AppLayout() {
           </NavLink>
         ))}
         <button
-          onClick={handleLogout}
+          onClick={() => {
+            setSidebarOpen(false);
+            void handleLogout();
+          }}
           className="w-full flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100/70 hover:text-gray-700 transition-colors"
         >
           <LogOut className="w-[18px] h-[18px] flex-shrink-0" />
-          Sign out
+          Logout
         </button>
       </div>
     </nav>
@@ -88,14 +91,16 @@ export function AppLayout() {
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
-          <aside className="fixed left-0 top-0 bottom-0 w-72 bg-white border-r border-gray-200 z-50 shadow-xl">
-            <div className="flex items-center justify-between px-4 pt-4 pb-2">
+          <aside className="fixed left-0 top-0 bottom-0 w-72 bg-white border-r border-gray-200 z-50 shadow-xl flex flex-col">
+            <div className="flex flex-shrink-0 items-center justify-between px-4 pt-4 pb-2">
               <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</span>
               <button onClick={() => setSidebarOpen(false)} className="p-1.5 rounded-[8px] hover:bg-gray-100">
                 <X className="w-4 h-4 text-gray-500" />
               </button>
             </div>
-            <Sidebar mobile />
+            <div className="min-h-0 flex-1">
+              <Sidebar mobile />
+            </div>
           </aside>
         </div>
       )}
