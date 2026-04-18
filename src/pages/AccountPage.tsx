@@ -31,6 +31,11 @@ export function AccountPage() {
   const handleUpgrade = async () => {
     setUpgradeLoading(true);
     try {
+      const ensuredProfile = profile ?? await fetchProfile();
+      if (!ensuredProfile) {
+        enqueueSnackbar('We could not load your account profile. Please refresh and try again.', { variant: 'error' });
+        return;
+      }
       const result = await client.queries.stripeCreateCheckout();
       if (result.data?.url) window.location.href = result.data.url;
       else enqueueSnackbar(result.data?.error ?? 'Checkout failed', { variant: 'error' });

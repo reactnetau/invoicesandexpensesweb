@@ -128,6 +128,11 @@ export function DashboardPage() {
   const handleUpgrade = async () => {
     setUpgradeLoading(true);
     try {
+      const ensuredProfile = profile ?? await fetchProfile();
+      if (!ensuredProfile) {
+        enqueueSnackbar('We could not load your account profile. Please refresh and try again.', { variant: 'error' });
+        return;
+      }
       const result = await client.queries.stripeCreateCheckout();
       const url = result.data?.url;
       if (url) {
