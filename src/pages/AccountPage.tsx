@@ -11,7 +11,7 @@ import { SEO } from '../components/SEO';
 
 export function AccountPage() {
   const { profile, loading, fetchProfile } = useProfile();
-  const { deleteCurrentUser, logout } = useAuth();
+  const { deleteCurrentUser } = useAuth();
   const navigate = useNavigate();
   const [upgradeLoading, setUpgradeLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -101,12 +101,12 @@ export function AccountPage() {
       navigate('/');
       enqueueSnackbar('Account deleted', { variant: 'success' });
     } catch (err) {
-      enqueueSnackbar(err instanceof Error ? err.message : 'Delete failed', { variant: 'error' });
-      try {
-        await logout();
-      } catch {
-        // best effort cleanup only
-      }
+      enqueueSnackbar(
+        err instanceof Error
+          ? `Account deletion failed: ${err.message}`
+          : 'Account deletion failed. Please try again.',
+        { variant: 'error' }
+      );
     } finally {
       setDeleteLoading(false);
     }
