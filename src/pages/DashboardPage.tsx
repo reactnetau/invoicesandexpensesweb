@@ -165,6 +165,29 @@ export function DashboardPage() {
         </button>
       </div>
 
+      {profile && !userIsPro && (
+        <div className="card p-4 mb-5 border-brand-200 bg-brand-50">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border border-brand-100 bg-white">
+                <Star className="h-4 w-4 text-brand-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">Subscribe to Pro</p>
+                <p className="text-sm text-gray-600">Unlimited invoices, CSV export, and AI summaries.</p>
+              </div>
+            </div>
+            <button
+              onClick={handleUpgrade}
+              disabled={upgradeLoading}
+              className="btn-primary shrink-0 justify-center"
+            >
+              {upgradeLoading ? 'Redirecting…' : 'Upgrade — $7/month'}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Plan badge */}
       {profile && (
         <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-5 border ${
