@@ -11,7 +11,7 @@ import {
 } from '../lib/format';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { ProModal } from '../components/ProModal';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 export function DashboardPage() {
@@ -39,7 +39,7 @@ export function DashboardPage() {
       setInvoices((invRes.data ?? []) as unknown as Invoice[]);
       setExpenses((expRes.data ?? []) as unknown as Expense[]);
     } catch (err) {
-      toast.error('Failed to load data');
+      enqueueSnackbar('Failed to load data', { variant: 'error' });
       console.error(err);
     } finally {
       setDataLoading(false);
@@ -87,10 +87,10 @@ export function DashboardPage() {
       if (result.data?.summary) {
         setAiSummary(result.data.summary);
       } else if (result.data?.error) {
-        toast.error(result.data.error);
+        enqueueSnackbar(result.data.error, { variant: 'error' });
       }
     } catch {
-      toast.error('Failed to get AI summary');
+      enqueueSnackbar('Failed to get AI summary', { variant: 'error' });
     } finally {
       setAiLoading(false);
     }
@@ -117,9 +117,9 @@ export function DashboardPage() {
       a.download = `invoices-expenses-${selectedFyStart}-${selectedFyStart + 1}.csv`;
       a.click();
       URL.revokeObjectURL(url);
-      toast.success('CSV downloaded');
+      enqueueSnackbar('CSV downloaded', { variant: 'success' });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Export failed');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Export failed', { variant: 'error' });
     } finally {
       setCsvLoading(false);
     }
@@ -133,10 +133,10 @@ export function DashboardPage() {
       if (url) {
         window.location.href = url;
       } else {
-        toast.error(result.data?.error ?? 'Failed to start checkout');
+        enqueueSnackbar(result.data?.error ?? 'Failed to start checkout', { variant: 'error' });
       }
     } catch {
-      toast.error('Upgrade failed');
+      enqueueSnackbar('Upgrade failed', { variant: 'error' });
     } finally {
       setUpgradeLoading(false);
     }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 export function ForgotPasswordPage() {
@@ -17,10 +17,10 @@ export function ForgotPasswordPage() {
     try {
       await forgotPassword(email);
       sessionStorage.setItem('reset_email', email);
-      toast.success('Reset code sent — check your email');
+      enqueueSnackbar('Reset code sent — check your email', { variant: 'success' });
       navigate('/reset-password');
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Failed to send reset code');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Failed to send reset code', { variant: 'error' });
     } finally {
       setLoading(false);
     }

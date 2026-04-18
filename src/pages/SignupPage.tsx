@@ -4,7 +4,7 @@ import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { CURRENCIES } from '../lib/format';
 import { SEO } from '../components/SEO';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 
 export function SignupPage() {
   const { register } = useAuth();
@@ -17,7 +17,7 @@ export function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password.length < 8) {
-      toast.error('Password must be at least 8 characters');
+      enqueueSnackbar('Password must be at least 8 characters', { variant: 'error' });
       return;
     }
     setLoading(true);
@@ -28,9 +28,9 @@ export function SignupPage() {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Sign up failed';
       if (msg.includes('already exists') || msg.includes('UsernameExistsException')) {
-        toast.error('An account with this email already exists. Try signing in.');
+        enqueueSnackbar('An account with this email already exists. Try signing in.', { variant: 'error' });
       } else {
-        toast.error(msg);
+        enqueueSnackbar(msg, { variant: 'error' });
       }
     } finally {
       setLoading(false);

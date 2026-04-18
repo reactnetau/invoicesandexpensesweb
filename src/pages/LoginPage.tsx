@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 export function LoginPage() {
@@ -24,7 +24,7 @@ export function LoginPage() {
         sessionStorage.setItem('pending_email', email);
         navigate('/confirm');
       } else {
-        toast.error(msg);
+        enqueueSnackbar(msg, { variant: 'error' });
       }
     } finally {
       setLoading(false);

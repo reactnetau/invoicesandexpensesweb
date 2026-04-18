@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { KeyRound } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 export function ConfirmSignupPage() {
@@ -20,16 +20,16 @@ export function ConfirmSignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
-      toast.error('Email is required');
+      enqueueSnackbar('Email is required', { variant: 'error' });
       return;
     }
     setLoading(true);
     try {
       await confirmRegistration(email, code);
-      toast.success('Account confirmed! Welcome aboard.');
+      enqueueSnackbar('Account confirmed! Welcome aboard.', { variant: 'success' });
       navigate('/dashboard');
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Confirmation failed');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Confirmation failed', { variant: 'error' });
     } finally {
       setLoading(false);
     }

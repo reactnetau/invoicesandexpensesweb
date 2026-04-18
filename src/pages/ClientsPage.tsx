@@ -3,7 +3,7 @@ import { Plus, Pencil, Trash2, Users, X, Check } from 'lucide-react';
 import { client, type Client } from '../lib/api';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 interface ClientForm {
@@ -35,7 +35,7 @@ export function ClientsPage() {
       );
       setClients(sorted as unknown as Client[]);
     } catch {
-      toast.error('Failed to load clients');
+      enqueueSnackbar('Failed to load clients', { variant: 'error' });
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ export function ClientsPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim()) { toast.error('Name is required'); return; }
+    if (!form.name.trim()) { enqueueSnackbar('Name is required', { variant: 'error' }); return; }
     setSaving(true);
     try {
       if (editingId) {
@@ -65,7 +65,7 @@ export function ClientsPage() {
           company: form.company || undefined,
           address: form.address || undefined,
         });
-        toast.success('Client updated');
+        enqueueSnackbar('Client updated', { variant: 'success' });
       } else {
         await client.models.Client.create({
           name: form.name,
@@ -74,12 +74,12 @@ export function ClientsPage() {
           company: form.company || undefined,
           address: form.address || undefined,
         });
-        toast.success('Client added');
+        enqueueSnackbar('Client added', { variant: 'success' });
       }
       closeForm();
       fetchClients();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Save failed');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Save failed', { variant: 'error' });
     } finally {
       setSaving(false);
     }
@@ -90,11 +90,11 @@ export function ClientsPage() {
     setDeleting(true);
     try {
       await client.models.Client.delete({ id: deleteId });
-      toast.success('Client deleted');
+      enqueueSnackbar('Client deleted', { variant: 'success' });
       setDeleteId(null);
       fetchClients();
     } catch {
-      toast.error('Delete failed');
+      enqueueSnackbar('Delete failed', { variant: 'error' });
     } finally {
       setDeleting(false);
     }

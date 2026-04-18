@@ -153,11 +153,11 @@ interface SendEmailArgs {
 
 const mutations = {
   createUserProfile: (args: { email: string; currency?: string }) =>
-    (_client as any).mutations.createUserProfile(args) as Promise<{
+    (_client as any).mutations.initializeUserProfile(args) as Promise<{
       data: { id: string | null; isFoundingMember: boolean | null; subscriptionStatus: string | null; error: string | null } | null;
     }>,
   createInvoice: (args: CreateInvoiceArgs) =>
-    (_client as any).mutations.createInvoice(args) as Promise<{ data: CreateInvoiceResult | null }>,
+    (_client as any).mutations.issueInvoice(args) as Promise<{ data: CreateInvoiceResult | null }>,
   stripeCancelSubscription: () =>
     (_client as any).mutations.stripeCancelSubscription() as Promise<{ data: { ok: boolean | null; error: string | null } | null }>,
   sendInvoiceEmail: (args: SendEmailArgs) =>

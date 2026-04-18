@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 export function ResetPasswordPage() {
@@ -22,17 +22,17 @@ export function ResetPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password.length < 8) {
-      toast.error('Password must be at least 8 characters');
+      enqueueSnackbar('Password must be at least 8 characters', { variant: 'error' });
       return;
     }
     setLoading(true);
     try {
       await confirmForgotPassword(email, code, password);
       sessionStorage.removeItem('reset_email');
-      toast.success('Password reset — please sign in');
+      enqueueSnackbar('Password reset — please sign in', { variant: 'success' });
       navigate('/login');
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Reset failed');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Reset failed', { variant: 'error' });
     } finally {
       setLoading(false);
     }

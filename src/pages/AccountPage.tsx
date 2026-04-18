@@ -6,7 +6,7 @@ import { useProfile } from '../hooks/useProfile';
 import { useAuth } from '../contexts/AuthContext';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 export function AccountPage() {
@@ -33,9 +33,9 @@ export function AccountPage() {
     try {
       const result = await client.queries.stripeCreateCheckout();
       if (result.data?.url) window.location.href = result.data.url;
-      else toast.error(result.data?.error ?? 'Checkout failed');
+      else enqueueSnackbar(result.data?.error ?? 'Checkout failed', { variant: 'error' });
     } catch {
-      toast.error('Upgrade failed');
+      enqueueSnackbar('Upgrade failed', { variant: 'error' });
     } finally {
       setUpgradeLoading(false);
     }
@@ -46,9 +46,9 @@ export function AccountPage() {
     try {
       const result = await client.queries.stripeCreatePortal();
       if (result.data?.url) window.location.href = result.data.url;
-      else toast.error(result.data?.error ?? 'Portal unavailable');
+      else enqueueSnackbar(result.data?.error ?? 'Portal unavailable', { variant: 'error' });
     } catch {
-      toast.error('Portal unavailable');
+      enqueueSnackbar('Portal unavailable', { variant: 'error' });
     } finally {
       setPortalLoading(false);
     }
@@ -59,14 +59,14 @@ export function AccountPage() {
     try {
       const result = await client.mutations.stripeCancelSubscription();
       if (result.data?.ok) {
-        toast.success('Subscription will cancel at period end');
+        enqueueSnackbar('Subscription will cancel at period end', { variant: 'success' });
         setCancelModal(false);
         fetchProfile();
       } else {
-        toast.error(result.data?.error ?? 'Cancel failed');
+        enqueueSnackbar(result.data?.error ?? 'Cancel failed', { variant: 'error' });
       }
     } catch {
-      toast.error('Cancel failed');
+      enqueueSnackbar('Cancel failed', { variant: 'error' });
     } finally {
       setCancelLoading(false);
     }
@@ -83,9 +83,9 @@ export function AccountPage() {
       }
       await logout();
       navigate('/');
-      toast.success('Account deleted');
+      enqueueSnackbar('Account deleted', { variant: 'success' });
     } catch {
-      toast.error('Delete failed');
+      enqueueSnackbar('Delete failed', { variant: 'error' });
     } finally {
       setDeleteLoading(false);
     }

@@ -4,7 +4,7 @@ import { useProfile } from '../hooks/useProfile';
 import { client } from '../lib/api';
 import { CURRENCIES } from '../lib/format';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 export function SettingsPage() {
@@ -56,9 +56,9 @@ export function SettingsPage() {
         abn: form.abn || null,
       });
       await fetchProfile();
-      toast.success('Settings saved');
+      enqueueSnackbar('Settings saved', { variant: 'success' });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Save failed');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Save failed', { variant: 'error' });
     } finally {
       setSaving(false);
     }
@@ -71,7 +71,7 @@ export function SettingsPage() {
       setPayidValue(result.data?.payid ?? '');
       setPayidLoaded(true);
     } catch {
-      toast.error('Failed to load PayID');
+      enqueueSnackbar('Failed to load PayID', { variant: 'error' });
     } finally {
       setPayidLoading(false);
     }
@@ -82,12 +82,12 @@ export function SettingsPage() {
     try {
       const result = await client.mutations.updateEncryptedPayid({ payid: payidValue });
       if (result.data?.ok) {
-        toast.success('PayID updated');
+        enqueueSnackbar('PayID updated', { variant: 'success' });
       } else {
-        toast.error(result.data?.error ?? 'Failed to update PayID');
+        enqueueSnackbar(result.data?.error ?? 'Failed to update PayID', { variant: 'error' });
       }
     } catch {
-      toast.error('Failed to update PayID');
+      enqueueSnackbar('Failed to update PayID', { variant: 'error' });
     } finally {
       setPayidSaving(false);
     }

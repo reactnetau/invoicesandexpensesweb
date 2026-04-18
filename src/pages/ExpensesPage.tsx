@@ -5,7 +5,7 @@ import { useProfile } from '../hooks/useProfile';
 import { formatCurrency, formatDate, EXPENSE_CATEGORIES } from '../lib/format';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 export function ExpensesPage() {
@@ -30,7 +30,7 @@ export function ExpensesPage() {
       );
       setExpenses(sorted as unknown as Expense[]);
     } catch {
-      toast.error('Failed to load expenses');
+      enqueueSnackbar('Failed to load expenses', { variant: 'error' });
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,7 @@ export function ExpensesPage() {
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     const amt = parseFloat(form.amount);
-    if (isNaN(amt) || amt <= 0) { toast.error('Enter a valid amount'); return; }
+    if (isNaN(amt) || amt <= 0) { enqueueSnackbar('Enter a valid amount', { variant: 'error' }); return; }
     setSaving(true);
     try {
       await client.models.Expense.create({
@@ -51,12 +51,12 @@ export function ExpensesPage() {
         amount: amt,
         date: new Date(form.date).toISOString(),
       });
-      toast.success('Expense added');
+      enqueueSnackbar('Expense added', { variant: 'success' });
       setFormOpen(false);
       setForm({ category: 'Software', amount: '', date: todayISO() });
       fetchExpenses();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to add expense');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Failed to add expense', { variant: 'error' });
     } finally {
       setSaving(false);
     }
@@ -67,11 +67,11 @@ export function ExpensesPage() {
     setDeleting(true);
     try {
       await client.models.Expense.delete({ id: deleteId });
-      toast.success('Expense deleted');
+      enqueueSnackbar('Expense deleted', { variant: 'success' });
       setDeleteId(null);
       fetchExpenses();
     } catch {
-      toast.error('Delete failed');
+      enqueueSnackbar('Delete failed', { variant: 'error' });
     } finally {
       setDeleting(false);
     }

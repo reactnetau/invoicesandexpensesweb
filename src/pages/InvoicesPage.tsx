@@ -9,7 +9,7 @@ import { formatCurrency, formatDate } from '../lib/format';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { ProModal } from '../components/ProModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
 
 const FREE_LIMIT = 5;
@@ -74,7 +74,7 @@ export function InvoicesPage() {
       setInvoices(sorted as unknown as Invoice[]);
       setClients((clientRes.data ?? []) as unknown as Client[]);
     } catch {
-      toast.error('Failed to load invoices');
+      enqueueSnackbar('Failed to load invoices', { variant: 'error' });
     } finally {
       setLoading(false);
     }
@@ -94,9 +94,9 @@ export function InvoicesPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.clientName.trim()) { toast.error('Client name is required'); return; }
+    if (!form.clientName.trim()) { enqueueSnackbar('Client name is required', { variant: 'error' }); return; }
     const amt = parseFloat(form.amount);
-    if (isNaN(amt) || amt <= 0) { toast.error('Enter a valid amount'); return; }
+    if (isNaN(amt) || amt <= 0) { enqueueSnackbar('Enter a valid amount', { variant: 'error' }); return; }
 
     setSaving(true);
     try {
@@ -120,23 +120,23 @@ export function InvoicesPage() {
         return;
       }
       if (result.data?.error) {
-        toast.error(result.data.error);
+        enqueueSnackbar(result.data.error, { variant: 'error' });
         return;
       }
 
       if (result.data?.emailSent) {
-        toast.success('Invoice created and email sent');
+        enqueueSnackbar('Invoice created and email sent', { variant: 'success' });
       } else if (result.data?.emailError) {
-        toast('Invoice created, but email failed: ' + result.data.emailError, { icon: '⚠️' });
+        enqueueSnackbar('Invoice created, but email failed: ' + result.data.emailError, { variant: 'warning' });
       } else {
-        toast.success('Invoice created');
+        enqueueSnackbar('Invoice created', { variant: 'success' });
       }
 
       setFormOpen(false);
       resetForm();
       fetchAll();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Create failed');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Create failed', { variant: 'error' });
     } finally {
       setSaving(false);
     }
@@ -159,10 +159,10 @@ export function InvoicesPage() {
         status: newStatus,
         paidAt: newStatus === 'paid' ? new Date().toISOString() : null,
       });
-      toast.success(newStatus === 'paid' ? 'Marked as paid' : 'Marked as unpaid');
+      enqueueSnackbar(newStatus === 'paid' ? 'Marked as paid' : 'Marked as unpaid', { variant: 'success' });
       fetchAll();
     } catch {
-      toast.error('Failed to update invoice');
+      enqueueSnackbar('Failed to update invoice', { variant: 'error' });
     }
   };
 
@@ -171,11 +171,11 @@ export function InvoicesPage() {
     setDeleting(true);
     try {
       await client.models.Invoice.delete({ id: deleteId });
-      toast.success('Invoice deleted');
+      enqueueSnackbar('Invoice deleted', { variant: 'success' });
       setDeleteId(null);
       fetchAll();
     } catch {
-      toast.error('Delete failed');
+      enqueueSnackbar('Delete failed', { variant: 'error' });
     } finally {
       setDeleting(false);
     }
@@ -184,7 +184,7 @@ export function InvoicesPage() {
   const handleCopyLink = (publicId: string) => {
     const url = `${APP_URL}/invoice/${publicId}`;
     navigator.clipboard.writeText(url);
-    toast.success('Public link copied');
+    enqueueSnackbar('Public link copied', { variant: 'success' });
   };
 
   const handleSendEmail = async () => {
@@ -196,13 +196,13 @@ export function InvoicesPage() {
         ...emailOpts,
       });
       if (result.data?.ok) {
-        toast.success('Email sent');
+        enqueueSnackbar('Email sent', { variant: 'success' });
         setEmailModal({ open: false, invoice: null });
       } else {
-        toast.error(result.data?.error ?? 'Email failed');
+        enqueueSnackbar(result.data?.error ?? 'Email failed', { variant: 'error' });
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Email failed');
+      enqueueSnackbar(err instanceof Error ? err.message : 'Email failed', { variant: 'error' });
     } finally {
       setEmailSending(false);
     }
@@ -213,9 +213,9 @@ export function InvoicesPage() {
     try {
       const result = await client.queries.stripeCreateCheckout();
       if (result.data?.url) window.location.href = result.data.url;
-      else toast.error(result.data?.error ?? 'Checkout failed');
+      else enqueueSnackbar(result.data?.error ?? 'Checkout failed', { variant: 'error' });
     } catch {
-      toast.error('Upgrade failed');
+      enqueueSnackbar('Upgrade failed', { variant: 'error' });
     } finally {
       setUpgradeLoading(false);
     }

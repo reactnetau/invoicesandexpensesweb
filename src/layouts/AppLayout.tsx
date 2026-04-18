@@ -5,7 +5,7 @@ import {
   Settings, User, LogOut, Menu, X,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import toast from 'react-hot-toast';
+import { enqueueSnackbar } from 'notistack';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -36,7 +36,7 @@ export function AppLayout() {
       await logout();
       navigate('/login');
     } catch {
-      toast.error('Failed to sign out');
+      enqueueSnackbar('Failed to sign out', { variant: 'error' });
     }
   };
 
