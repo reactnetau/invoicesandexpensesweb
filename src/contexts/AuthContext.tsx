@@ -5,6 +5,7 @@ import {
   signOut,
   signUp,
   confirmSignUp,
+  deleteUser,
   resetPassword,
   confirmResetPassword,
   type AuthUser,
@@ -20,6 +21,7 @@ interface AuthContextValue {
   confirmRegistration: (email: string, code: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   confirmForgotPassword: (email: string, code: string, newPassword: string) => Promise<void>;
+  deleteCurrentUser: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
 
@@ -89,8 +91,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await confirmResetPassword({ username: email, confirmationCode: code, newPassword });
   };
 
+  const deleteCurrentUser = async () => {
+    await deleteUser();
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, register, confirmRegistration, forgotPassword, confirmForgotPassword, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register, confirmRegistration, forgotPassword, confirmForgotPassword, deleteCurrentUser, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

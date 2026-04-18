@@ -7,7 +7,6 @@ frontend:
         - nvm use 20
         - node --version
         - yarn install --frozen-lockfile
-        - yarn ampx generate outputs --app-id d2abcyagvq3j4o --branch main --out-dir .
     build:
       commands:
         - yarn build

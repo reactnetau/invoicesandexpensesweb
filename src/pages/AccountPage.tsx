@@ -11,7 +11,7 @@ import { SEO } from '../components/SEO';
 
 export function AccountPage() {
   const { profile, loading, fetchProfile } = useProfile();
-  const { logout } = useAuth();
+  const { deleteCurrentUser, logout } = useAuth();
   const navigate = useNavigate();
   const [upgradeLoading, setUpgradeLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -80,17 +80,33 @@ export function AccountPage() {
   const handleDeleteAccount = async () => {
     setDeleteLoading(true);
     try {
-      // Delete all user data (profile, invoices, expenses, clients)
+      // Delete all user data first, then remove the Cognito account so the
+      // email can be used again if the person signs up later.
       if (profile) {
+        const [invoices, expenses, clients] = await Promise.all([
+          client.models.Invoice.list(),
+          client.models.Expense.list(),
+          client.models.Client.list(),
+        ]);
+
         await Promise.all([
+          ...(invoices.data ?? []).map((invoice) => client.models.Invoice.delete({ id: invoice.id })),
+          ...(expenses.data ?? []).map((expense) => client.models.Expense.delete({ id: expense.id })),
+          ...(clients.data ?? []).map((clientRecord) => client.models.Client.delete({ id: clientRecord.id })),
           client.models.UserProfile.delete({ id: profile.id }),
         ]);
       }
-      await logout();
+
+      await deleteCurrentUser();
       navigate('/');
       enqueueSnackbar('Account deleted', { variant: 'success' });
-    } catch {
-      enqueueSnackbar('Delete failed', { variant: 'error' });
+    } catch (err) {
+      enqueueSnackbar(err instanceof Error ? err.message : 'Delete failed', { variant: 'error' });
+      try {
+        await logout();
+      } catch {
+        // best effort cleanup only
+      }
     } finally {
       setDeleteLoading(false);
     }
