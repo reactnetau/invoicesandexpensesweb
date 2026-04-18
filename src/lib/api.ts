@@ -78,6 +78,14 @@ export function isPro(
 type ListResult<T> = { data: T[] | null };
 type ItemResult<T> = { data: T | null };
 
+function getReturnUrl() {
+  if (typeof window !== 'undefined') return window.location.origin;
+
+  const appUrl = import.meta.env.VITE_APP_URL?.trim();
+  if (!appUrl) return undefined;
+  return /^https?:\/\//i.test(appUrl) ? appUrl.replace(/\/+$/, '') : `https://${appUrl.replace(/\/+$/, '')}`;
+}
+
 // ── Typed client ─────────────────────────────────────────────────────────────
 // We re-export a `client` object with the same surface area as the
 // generateClient<Schema>() client the mobile app uses, but fully typed here.
@@ -168,9 +176,9 @@ const mutations = {
 
 const queries = {
   stripeCreateCheckout: () =>
-    (_client as any).queries.stripeCreateCheckout() as Promise<{ data: { url: string | null; error: string | null } | null }>,
+    (_client as any).queries.stripeCreateCheckout({ returnUrl: getReturnUrl() }) as Promise<{ data: { url: string | null; error: string | null } | null }>,
   stripeCreatePortal: () =>
-    (_client as any).queries.stripeCreatePortal() as Promise<{ data: { url: string | null; error: string | null } | null }>,
+    (_client as any).queries.stripeCreatePortal({ returnUrl: getReturnUrl() }) as Promise<{ data: { url: string | null; error: string | null } | null }>,
   exportCsv: (args: { fyStart: number }) =>
     (_client as any).queries.exportCsv(args) as Promise<{ data: { content: string | null; error: string | null } | null }>,
   getAiSummary: (args: { fyStart: number }) =>
