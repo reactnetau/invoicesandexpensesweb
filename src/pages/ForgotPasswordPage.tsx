@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 export function ForgotPasswordPage() {
   const { forgotPassword } = useAuth();
@@ -27,6 +28,7 @@ export function ForgotPasswordPage() {
 
   return (
     <div className="card p-8">
+      <SEO title="Forgot Password" noIndex />
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Forgot password?</h1>
       <p className="text-sm text-gray-500 mb-6">Enter your email and we'll send a reset code</p>
 

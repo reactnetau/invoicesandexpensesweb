@@ -6,6 +6,7 @@ import { formatCurrency, formatDate, EXPENSE_CATEGORIES } from '../lib/format';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 export function ExpensesPage() {
   const { profile, fetchProfile } = useProfile();
@@ -78,6 +79,7 @@ export function ExpensesPage() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
+      <SEO title="Expenses" noIndex />
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -146,13 +148,17 @@ export function ExpensesPage() {
       {loading ? (
         <div className="flex justify-center py-16"><LoadingSpinner size="lg" /></div>
       ) : expenses.length === 0 ? (
-        <div className="card p-12 text-center">
-          <Receipt className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-500">No expenses yet</p>
-          <p className="text-sm text-gray-400 mt-1">Track your business expenses here</p>
-          <button onClick={() => setFormOpen(true)} className="btn-primary mt-4 mx-auto">
+        <div className="card">
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <Receipt className="w-7 h-7 text-gray-400" />
+            </div>
+            <p className="font-semibold text-gray-700 mb-1">No expenses yet</p>
+            <p className="text-sm text-gray-400 mb-5">Track your business expenses here</p>
+            <button onClick={() => setFormOpen(true)} className="btn-primary">
             <Plus className="w-4 h-4" /> Add expense
           </button>
+          </div>
         </div>
       ) : (
         <div className="card overflow-hidden">
@@ -161,8 +167,8 @@ export function ExpensesPage() {
               key={exp.id}
               className={`flex items-center gap-4 px-4 py-4 ${idx !== expenses.length - 1 ? 'border-b border-gray-100' : ''}`}
             >
-              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
-                <Receipt className="w-4 h-4 text-red-500" />
+              <div className="icon-box-sm">
+                <Receipt className="w-4 h-4 text-brand-600" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-gray-900">{exp.category}</p>

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
 import App from './App';
 import './index.css';
@@ -8,6 +9,7 @@ import './lib/amplify';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <HelmetProvider>
     <BrowserRouter>
       <App />
       <Toaster
@@ -24,5 +26,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         }}
       />
     </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>
 );

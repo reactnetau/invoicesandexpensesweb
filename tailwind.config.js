@@ -4,18 +4,41 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Brand = blue-600 (#2563EB), matching mobile colors.primary
         brand: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+          50:  '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
         },
+        // Semantic surface colours matching mobile theme tokens
+        surface: {
+          DEFAULT: '#ffffff',
+          secondary: '#f1f5f9',
+        },
+        ink: {
+          DEFAULT: '#0f172a',
+          secondary: '#475569',
+          muted: '#94a3b8',
+        },
+      },
+      borderRadius: {
+        // Mobile radius.md = 10px, radius.lg = 14px, radius.xl = 20px
+        card: '14px',
+        btn:  '10px',
+        input: '10px',
+        badge: '9999px',
+        modal: '20px',
+      },
+      boxShadow: {
+        card: '0 1px 3px 0 rgba(0,0,0,0.05), 0 1px 2px -1px rgba(0,0,0,0.04)',
+        md:   '0 2px 8px 0 rgba(0,0,0,0.08)',
       },
     },
   },

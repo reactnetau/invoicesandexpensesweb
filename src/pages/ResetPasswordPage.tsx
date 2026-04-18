@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 export function ResetPasswordPage() {
   const { confirmForgotPassword } = useAuth();
@@ -39,6 +40,7 @@ export function ResetPasswordPage() {
 
   return (
     <div className="card p-8">
+      <SEO title="Reset Password" noIndex />
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Reset password</h1>
       <p className="text-sm text-gray-500 mb-6">Enter the code we sent to your email</p>
 

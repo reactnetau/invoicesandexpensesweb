@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { CURRENCIES } from '../lib/format';
+import { SEO } from '../components/SEO';
 import toast from 'react-hot-toast';
 
 export function SignupPage() {
@@ -38,6 +39,7 @@ export function SignupPage() {
 
   return (
     <div className="card p-8">
+      <SEO title="Create Account" description="Create a free account to start invoicing clients and tracking expenses." canonical="/signup" />
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Create account</h1>
       <p className="text-sm text-gray-500 mb-6">Start invoicing and tracking expenses for free</p>
 

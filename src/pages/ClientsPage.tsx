@@ -4,6 +4,7 @@ import { client, type Client } from '../lib/api';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 interface ClientForm {
   name: string;
@@ -101,6 +102,7 @@ export function ClientsPage() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
+      <SEO title="Clients" noIndex />
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Clients</h1>
@@ -155,13 +157,17 @@ export function ClientsPage() {
       {loading ? (
         <div className="flex justify-center py-16"><LoadingSpinner size="lg" /></div>
       ) : clients.length === 0 ? (
-        <div className="card p-12 text-center">
-          <Users className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-500">No clients yet</p>
-          <p className="text-sm text-gray-400 mt-1">Add your first client to get started</p>
-          <button onClick={openAdd} className="btn-primary mt-4 mx-auto">
+        <div className="card">
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <Users className="w-7 h-7 text-gray-400" />
+            </div>
+            <p className="font-semibold text-gray-700 mb-1">No clients yet</p>
+            <p className="text-sm text-gray-400 mb-5">Add your first client to get started</p>
+            <button onClick={openAdd} className="btn-primary">
             <Plus className="w-4 h-4" /> Add client
           </button>
+          </div>
         </div>
       ) : (
         <div className="card overflow-hidden">
@@ -170,8 +176,8 @@ export function ClientsPage() {
               key={c.id}
               className={`flex items-center gap-4 px-4 py-4 ${idx !== clients.length - 1 ? 'border-b border-gray-100' : ''}`}
             >
-              <div className="w-9 h-9 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0">
-                <span className="text-sm font-bold text-brand-700">{c.name.charAt(0).toUpperCase()}</span>
+              <div className="w-10 h-10 rounded-full bg-brand-50 border border-brand-100 flex items-center justify-center flex-shrink-0">
+                <span className="text-base font-bold text-brand-600">{c.name.charAt(0).toUpperCase()}</span>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-gray-900 truncate">{c.name}</p>

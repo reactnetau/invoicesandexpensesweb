@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { KeyRound } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 export function ConfirmSignupPage() {
   const { confirmRegistration } = useAuth();
@@ -36,6 +37,7 @@ export function ConfirmSignupPage() {
 
   return (
     <div className="card p-8">
+      <SEO title="Confirm Account" noIndex />
       <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center mx-auto mb-4">
         <KeyRound className="w-6 h-6 text-brand-600" />
       </div>

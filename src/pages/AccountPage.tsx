@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 export function AccountPage() {
   const { profile, loading, fetchProfile } = useProfile();
@@ -92,6 +93,7 @@ export function AccountPage() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
+      <SEO title="Account" noIndex />
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Account</h1>
 
       {/* Account info */}

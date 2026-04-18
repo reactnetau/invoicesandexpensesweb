@@ -1,83 +1,121 @@
 import { Link } from 'react-router-dom';
-import {
-  Zap, FileText, Receipt, BarChart2, Globe, Mail,
-  Check, Star, ArrowRight,
-} from 'lucide-react';
+import { FileText, Receipt, BarChart2, Globe, Mail, Check, ArrowRight, Zap } from 'lucide-react';
+import { SEO } from '../components/SEO';
+
+const APP_URL = import.meta.env.VITE_APP_URL ?? '';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${APP_URL}/#website`,
+      url: APP_URL || undefined,
+      name: 'Invoices & Expenses',
+      description: 'Free invoicing and expense tracking for freelancers and contractors',
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Invoices & Expenses',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      offers: [
+        { '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free Plan' },
+        { '@type': 'Offer', price: '7', priceCurrency: 'USD', name: 'Pro Plan' },
+      ],
+      description: 'Simple invoice and expense tracking for freelancers and contractors.',
+      url: APP_URL || undefined,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is Invoices & Expenses free?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. The free plan lets you create up to 5 invoices per month with unlimited expense tracking. The Pro plan is $7/month for unlimited invoices and CSV export.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Who is Invoices & Expenses for?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Invoices & Expenses is built for freelancers, contractors, and small business owners who want simple invoicing and expense tracking without complex accounting software.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I send invoices as PDF?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. You can generate and email a PDF invoice directly to your client from the invoices page.',
+          },
+        },
+      ],
+    },
+  ],
+};
 
 const features = [
   {
     icon: FileText,
-    title: 'Professional invoices',
-    desc: 'Create clean invoices in seconds. Send PDF invoices to clients via email — straight from the app.',
+    title: 'Send polished invoices',
+    desc: 'Create client-ready invoices with public payment links and email delivery.',
   },
   {
     icon: Receipt,
-    title: 'Expense tracking',
-    desc: 'Log business expenses by category. See your real costs at a glance across any date range.',
+    title: 'Track expenses easily',
+    desc: 'Log business expenses by category. Know exactly what you\'re spending.',
   },
   {
     icon: BarChart2,
-    title: 'Profit dashboard',
-    desc: 'See income, expenses, and net profit for any Australian financial year. Know where you stand.',
+    title: 'Know your numbers',
+    desc: 'Track income, expenses, and net profit for any financial year.',
   },
   {
     icon: Globe,
     title: 'Public invoice links',
-    desc: 'Every invoice gets a unique public URL you can share with clients — no login required to view.',
+    desc: 'Every invoice gets a unique URL you can share — no login required to view.',
   },
   {
     icon: Mail,
     title: 'PDF email delivery',
-    desc: 'Attach your invoice as a PDF and email it to clients directly. Include your PayID for easy payment.',
+    desc: 'Attach your invoice as a PDF and email it to clients directly.',
   },
   {
-    icon: Star,
+    icon: Zap,
     title: 'AI financial summaries',
-    desc: 'Get plain-English AI summaries of your financial year — powered by Claude. Pro plan feature.',
+    desc: 'Get plain-English summaries of your financial year — powered by Claude.',
   },
 ];
 
-const freePlan = {
-  name: 'Free',
-  price: '$0',
-  period: 'forever',
-  features: [
-    '5 invoices per month',
-    'Unlimited expenses',
-    'Unlimited clients',
-    'Public invoice links',
-    'PDF invoice download',
-  ],
-};
-
-const proPlan = {
-  name: 'Pro',
-  price: '$7',
-  period: 'per month',
-  features: [
-    'Unlimited invoices',
-    'Everything in Free',
-    'PDF + email delivery',
-    'CSV export',
-    'AI financial summaries',
-    'Priority support',
-  ],
-};
+const ACTIVITY = [
+  { title: 'Invoice sent', meta: 'Design retainer · $1,250', dot: 'bg-brand-500' },
+  { title: 'Expense logged', meta: 'Software · $49', dot: 'bg-green-500' },
+  { title: 'Client added', meta: 'Aster Studio', dot: 'bg-amber-500' },
+];
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Nav */}
-      <header className="sticky top-0 bg-white/90 backdrop-blur border-b border-gray-100 z-10">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
+      <SEO
+        title="Free Invoicing &amp; Expense Tracking for Freelancers"
+        description="Create professional invoices, track expenses, and see your profit instantly. Free invoicing software built for freelancers and contractors. No accounting knowledge needed."
+        canonical="/"
+        jsonLd={jsonLd}
+      />
+
+      {/* ── Nav ── */}
+      <header className="sticky top-0 bg-white/90 backdrop-blur border-b border-gray-200 z-10">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold text-gray-900">Invoices & Expenses</span>
+          <div className="flex items-center gap-2.5">
+            <img src="/schmappslogo.png" alt="Schmapps logo" className="w-8 h-8 rounded-[10px] object-cover" />
+            <span className="font-bold text-gray-900 text-sm">Invoices & Expenses</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link to="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+            <Link to="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               Sign in
             </Link>
             <Link to="/signup" className="btn-primary !py-2 !px-4 text-sm">
@@ -87,43 +125,62 @@ export function LandingPage() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 py-20 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-xs font-semibold mb-6">
-          <Star className="w-3 h-3" /> Simple invoicing for freelancers
+      {/* ── Hero ── */}
+      <section className="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center">
+        <img src="/schmappslogo.png" alt="Schmapps logo" className="w-20 h-20 rounded-[20px] object-cover mx-auto mb-6 shadow-md" />
+
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider mb-6">
+          <Zap className="w-3 h-3" /> Freelance finance
         </div>
-        <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-          Invoicing & expenses,{' '}
+
+        <h1 className="text-4xl sm:text-6xl font-extrabold text-gray-900 leading-tight mb-5">
+          Invoices & expenses,{' '}
           <span className="text-brand-600">the simple way</span>
         </h1>
-        <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-10">
-          Create professional invoices, track expenses, and understand your profit — built for freelancers, contractors, and small business owners.
+        <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto mb-8">
+          Send invoices, record costs, and see what you actually earned — without wrestling a spreadsheet.
         </p>
-        <div className="flex gap-4 justify-center flex-wrap">
-          <Link to="/signup" className="btn-primary !text-base !py-3 !px-6">
-            Start for free <ArrowRight className="w-4 h-4" />
+
+        <div className="flex gap-3 justify-center flex-wrap mb-6">
+          <Link to="/signup" className="btn-primary !text-base !py-3 !px-7">
+            Create free account <ArrowRight className="w-4 h-4" />
           </Link>
           <Link to="/login" className="btn-secondary !text-base !py-3 !px-6">
             Sign in
           </Link>
         </div>
-        <p className="mt-4 text-sm text-gray-400">No credit card required · 5 free invoices/month</p>
+        <p className="text-sm text-gray-400">No credit card required · 5 free invoices/month</p>
       </section>
 
-      {/* Features */}
-      <section className="bg-gray-50 py-20">
+      {/* ── Stats band ── */}
+      <div className="border-y border-gray-200 bg-white">
+        <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+          {[
+            { value: '$0', label: 'Free to start' },
+            { value: '5',  label: 'Invoices free' },
+            { value: '$7', label: 'Pro monthly' },
+            { value: '50', label: 'Founder spots' },
+          ].map((s) => (
+            <div key={s.label}>
+              <p className="text-2xl font-extrabold text-brand-600 mb-1">{s.value}</p>
+              <p className="text-xs text-gray-500">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Features ── */}
+      <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-3">Everything you need</h2>
-          <p className="text-gray-500 text-center mb-12 max-w-xl mx-auto">
-            From sending your first invoice to understanding your annual profit — we've got you covered.
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <p className="text-xs font-extrabold text-brand-600 uppercase tracking-widest text-center mb-2">Daily workflow</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-12">Everything stays tidy</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {features.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center mb-4">
+              <div key={title} className="card p-6">
+                <div className="icon-box-md mb-4">
                   <Icon className="w-5 h-5 text-brand-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
+                <h3 className="font-bold text-gray-900 mb-1.5">{title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
               </div>
             ))}
@@ -131,89 +188,128 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-3">Simple pricing</h2>
-          <p className="text-gray-500 text-center mb-12">Start free. Upgrade when you're ready.</p>
-          <div className="grid sm:grid-cols-2 gap-6">
-            <PricingCard plan={freePlan} />
-            <PricingCard plan={proPlan} highlighted />
+      {/* ── Dark panel — live snapshot ── */}
+      <section className="max-w-5xl mx-auto px-6 pb-20">
+        <div className="rounded-2xl bg-gray-900 p-7 sm:p-10">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-600/20 border border-brand-400/20 mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+            <span className="text-xs font-bold text-blue-300 uppercase tracking-wider">Live snapshot</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Your week at a glance</h2>
+          <p className="text-sm text-gray-400 mb-7 leading-relaxed">
+            A simple activity feed keeps the admin work visible and under control.
+          </p>
+          <div className="space-y-3">
+            {ACTIVITY.map((item) => (
+              <div key={item.title} className="flex items-center gap-4 bg-white/5 border border-white/8 rounded-xl px-4 py-3.5">
+                <div className="w-8 h-8 rounded-[8px] bg-brand-600/25 flex items-center justify-center flex-shrink-0">
+                  <span className={`w-2 h-2 rounded-full ${item.dot}`} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-white">{item.title}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{item.meta}</p>
+                </div>
+                <span className="text-xs text-gray-600">now</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-brand-600 py-16 text-center">
-        <div className="max-w-2xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to get started?</h2>
-          <p className="text-brand-200 mb-8 text-lg">
+      {/* ── Pricing ── */}
+      <section className="py-20 bg-white border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-6">
+          <p className="text-xs font-extrabold text-brand-600 uppercase tracking-widest text-center mb-2">Simple pricing</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-12">Start free, grow when ready</h2>
+          <div className="grid sm:grid-cols-2 gap-5">
+            <PricingCard
+              name="Free"
+              price="$0"
+              period="forever"
+              features={['5 invoices per month', 'Unlimited expenses', 'Unlimited clients', 'Public invoice links', 'PDF invoice download']}
+            />
+            <PricingCard
+              name="Pro"
+              price="$7"
+              period="per month"
+              features={['Unlimited invoices', 'Everything in Free', 'PDF + email delivery', 'CSV export', 'AI financial summaries']}
+              highlighted
+            />
+          </div>
+          <p className="text-center text-sm text-gray-400 mt-6">
+            First 50 users get permanent Pro free as founding members.
+          </p>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="py-20 text-center">
+        <div className="max-w-xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to get started?</h2>
+          <p className="text-gray-500 mb-8 leading-relaxed">
             Join freelancers and small business owners who use Invoices & Expenses every day.
           </p>
-          <Link to="/signup" className="inline-flex items-center gap-2 bg-white text-brand-700 font-bold px-8 py-3.5 rounded-xl hover:bg-brand-50 transition-colors text-base">
+          <Link to="/signup" className="btn-primary !text-base !py-3 !px-8">
             Create free account <ArrowRight className="w-4 h-4" />
           </Link>
+          <p className="mt-3 text-sm text-gray-400">No credit card required.</p>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-100 py-8">
-        <div className="max-w-5xl mx-auto px-6 flex items-center justify-between text-sm text-gray-400 flex-wrap gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-brand-600 flex items-center justify-center">
-              <Zap className="w-3 h-3 text-white" />
-            </div>
+      {/* ── Footer ── */}
+      <footer className="border-t border-gray-200 py-8">
+        <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+          <div className="flex items-center gap-2.5">
+            <img src="/schmappslogo.png" alt="Schmapps logo" className="w-6 h-6 rounded-[8px] object-cover" />
             <span className="font-semibold text-gray-600">Invoices & Expenses</span>
           </div>
-          <p>© {new Date().getFullYear()} Invoices & Expenses. All rights reserved.</p>
+          <div className="flex items-center gap-5 flex-wrap justify-center">
+            <Link to="/support" className="hover:text-gray-600 transition-colors">Support</Link>
+            <Link to="/delete-account" className="hover:text-gray-600 transition-colors">Delete account</Link>
+            <span>© {new Date().getFullYear()} Invoices & Expenses</span>
+          </div>
         </div>
       </footer>
     </div>
   );
 }
 
-interface Plan {
-  name: string;
-  price: string;
-  period: string;
-  features: string[];
-}
-
-function PricingCard({ plan, highlighted }: { plan: Plan; highlighted?: boolean }) {
+function PricingCard({
+  name, price, period, features, highlighted,
+}: {
+  name: string; price: string; period: string;
+  features: string[]; highlighted?: boolean;
+}) {
   return (
-    <div className={`rounded-xl border p-8 flex flex-col ${
+    <div className={`rounded-card border p-7 flex flex-col ${
       highlighted
-        ? 'bg-brand-600 border-brand-600 text-white shadow-xl'
-        : 'bg-white border-gray-200'
+        ? 'bg-brand-600 border-brand-600 shadow-md text-white'
+        : 'bg-white border-gray-200 shadow-card'
     }`}>
-      <p className={`text-sm font-semibold mb-3 ${highlighted ? 'text-brand-200' : 'text-gray-500'}`}>
-        {plan.name}
+      <p className={`text-xs font-bold uppercase tracking-wider mb-2 ${highlighted ? 'text-blue-200' : 'text-gray-500'}`}>
+        {name}
       </p>
-      <div className="flex items-baseline gap-1 mb-1">
-        <span className={`text-4xl font-extrabold ${highlighted ? 'text-white' : 'text-gray-900'}`}>
-          {plan.price}
-        </span>
-        <span className={`text-sm ${highlighted ? 'text-brand-200' : 'text-gray-400'}`}>
-          /{plan.period}
-        </span>
+      <div className="flex items-baseline gap-1 mb-5">
+        <span className={`text-4xl font-extrabold ${highlighted ? 'text-white' : 'text-gray-900'}`}>{price}</span>
+        <span className={`text-sm ${highlighted ? 'text-blue-200' : 'text-gray-400'}`}>/{period}</span>
       </div>
-      <ul className="mt-6 space-y-3 flex-1">
-        {plan.features.map((f) => (
-          <li key={f} className="flex items-center gap-3 text-sm">
-            <Check className={`w-4 h-4 flex-shrink-0 ${highlighted ? 'text-brand-200' : 'text-green-500'}`} />
-            <span className={highlighted ? 'text-brand-100' : 'text-gray-600'}>{f}</span>
+      <ul className="space-y-2.5 flex-1 mb-7">
+        {features.map((f) => (
+          <li key={f} className="flex items-center gap-2.5 text-sm">
+            <Check className={`w-4 h-4 flex-shrink-0 ${highlighted ? 'text-blue-200' : 'text-green-600'}`} />
+            <span className={highlighted ? 'text-blue-100' : 'text-gray-600'}>{f}</span>
           </li>
         ))}
       </ul>
       <Link
         to="/signup"
-        className={`mt-8 block text-center py-3 rounded-xl font-semibold text-sm transition-colors ${
+        className={`block text-center py-2.5 rounded-btn font-semibold text-sm transition-colors ${
           highlighted
-            ? 'bg-white text-brand-700 hover:bg-brand-50'
+            ? 'bg-white text-brand-700 hover:bg-blue-50'
             : 'bg-brand-600 text-white hover:bg-brand-700'
         }`}
       >
-        {highlighted ? 'Get started' : 'Sign up free'}
+        {highlighted ? 'Get Pro' : 'Sign up free'}
       </Link>
     </div>
   );

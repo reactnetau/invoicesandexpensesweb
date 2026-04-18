@@ -10,6 +10,7 @@ import { ConfirmModal } from '../components/ConfirmModal';
 import { ProModal } from '../components/ProModal';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 const FREE_LIMIT = 5;
 const APP_URL = 'https://invoicesandexpenses.com';
@@ -222,6 +223,7 @@ export function InvoicesPage() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
+      <SEO title="Invoices" noIndex />
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -381,13 +383,17 @@ export function InvoicesPage() {
       {loading ? (
         <div className="flex justify-center py-16"><LoadingSpinner size="lg" /></div>
       ) : invoices.length === 0 ? (
-        <div className="card p-12 text-center">
-          <FileText className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="font-medium text-gray-500">No invoices yet</p>
-          <p className="text-sm text-gray-400 mt-1">Create your first invoice to get started</p>
-          <button onClick={() => setFormOpen(true)} className="btn-primary mt-4 mx-auto">
-            <Plus className="w-4 h-4" /> New invoice
-          </button>
+        <div className="card">
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <FileText className="w-7 h-7 text-gray-400" />
+            </div>
+            <p className="font-semibold text-gray-700 mb-1">No invoices yet</p>
+            <p className="text-sm text-gray-400 mb-5">Create your first invoice to get started</p>
+            <button onClick={() => setFormOpen(true)} className="btn-primary">
+              <Plus className="w-4 h-4" /> New invoice
+            </button>
+          </div>
         </div>
       ) : (
         <div className="card overflow-hidden">
@@ -413,10 +419,10 @@ export function InvoicesPage() {
                   <td className="px-4 py-3 text-center">
                     <button
                       onClick={() => handleTogglePaid(inv)}
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium transition-colors ${
+                      className={`inline-flex items-center gap-1 border rounded-full px-2 py-0.5 text-xs font-semibold transition-colors ${
                         inv.status === 'paid'
-                          ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                          : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                          ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
+                          : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
                       }`}
                     >
                       {inv.status === 'paid'

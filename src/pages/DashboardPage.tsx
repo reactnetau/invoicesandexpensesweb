@@ -12,6 +12,7 @@ import {
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { ProModal } from '../components/ProModal';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 export function DashboardPage() {
   const { profile, loading: profileLoading, fetchProfile } = useProfile();
@@ -145,6 +146,7 @@ export function DashboardPage() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
+      <SEO title="Dashboard" noIndex />
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -160,10 +162,8 @@ export function DashboardPage() {
 
       {/* Plan badge */}
       {profile && (
-        <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5 border ${
-          userIsPro
-            ? 'bg-amber-50 border-amber-200 text-amber-700'
-            : 'bg-gray-100 border-gray-200 text-gray-600'
+        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-5 border ${
+          userIsPro ? 'badge-pro' : 'badge-free'
         }`}>
           <Star className="w-3 h-3" />
           {profile.isFoundingMember
@@ -355,24 +355,28 @@ function StatCard({
   label: string; value: string; subtitle?: string;
   icon: React.ReactNode; color: 'green' | 'red' | 'blue' | 'amber';
 }) {
-  const bg = { green: 'bg-green-50', red: 'bg-red-50', blue: 'bg-brand-50', amber: 'bg-amber-50' }[color];
+  const bg = {
+    green: 'bg-green-50 border-green-100',
+    red:   'bg-red-50 border-red-100',
+    blue:  'bg-brand-50 border-brand-100',
+    amber: 'bg-amber-50 border-amber-100',
+  }[color];
   return (
     <div className="stat-card">
-      <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center mb-3`}>{icon}</div>
-      <p className="text-xs font-medium text-gray-500 mb-1">{label}</p>
+      <div className={`w-10 h-10 rounded-[10px] border flex items-center justify-center mb-3 ${bg}`}>
+        {icon}
+      </div>
+      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{label}</p>
       <p className="text-xl font-bold text-gray-900 leading-none">{value}</p>
-      {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}
+      {subtitle && <p className="text-xs text-gray-400 mt-1.5">{subtitle}</p>}
     </div>
   );
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const isPaid = status === 'paid';
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-      isPaid ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
-    }`}>
-      {isPaid ? 'Paid' : 'Unpaid'}
+    <span className={status === 'paid' ? 'badge-paid' : 'badge-unpaid'}>
+      {status === 'paid' ? 'Paid' : 'Unpaid'}
     </span>
   );
 }

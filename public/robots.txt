@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /invoices
+Disallow: /expenses
+Disallow: /clients
+Disallow: /settings
+Disallow: /account
+Disallow: /invoice/
+Disallow: /confirm
+Disallow: /reset-password
+
+Sitemap: https://www.invoicesandexpenses.com/sitemap.xml

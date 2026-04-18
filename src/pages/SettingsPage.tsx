@@ -5,6 +5,7 @@ import { client } from '../lib/api';
 import { CURRENCIES } from '../lib/format';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { SEO } from '../components/SEO';
 
 export function SettingsPage() {
   const { profile, loading, fetchProfile } = useProfile();
@@ -96,6 +97,7 @@ export function SettingsPage() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
+      <SEO title="Settings" noIndex />
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Settings</h1>
 
       <form onSubmit={handleSave} className="space-y-6">

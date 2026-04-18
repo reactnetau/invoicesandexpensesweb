@@ -21,6 +21,10 @@ import { AccountPage } from './pages/AccountPage';
 // Public pages
 import { LandingPage } from './pages/LandingPage';
 import { PublicInvoicePage } from './pages/PublicInvoicePage';
+import { DeleteAccountPage } from './pages/DeleteAccountPage';
+import { SupportPage } from './pages/SupportPage';
+import { StripeSuccessPage } from './pages/StripeSuccessPage';
+import { StripeCancelPage } from './pages/StripeCancelPage';
 
 import { LoadingSpinner } from './components/LoadingSpinner';
 
@@ -46,6 +50,12 @@ function AppRoutes() {
 
       {/* Public invoice — no auth required */}
       <Route path="/invoice/:publicId" element={<PublicInvoicePage />} />
+
+      {/* Public utility pages */}
+      <Route path="/delete-account" element={<DeleteAccountPage />} />
+      <Route path="/support" element={<SupportPage />} />
+      <Route path="/stripe-success" element={<StripeSuccessPage />} />
+      <Route path="/stripe-cancel" element={<StripeCancelPage />} />
 
       {/* Auth flow — guests only */}
       <Route element={<AuthLayout />}>
