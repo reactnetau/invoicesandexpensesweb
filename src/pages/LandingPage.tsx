@@ -112,7 +112,7 @@ export function LandingPage() {
         const data = result.data;
         if (
           !cancelled &&
-          data?.enabled &&
+          data &&
           typeof data.claimed === 'number' &&
           typeof data.limit === 'number' &&
           typeof data.available === 'number' &&
