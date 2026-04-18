@@ -19,6 +19,7 @@ export interface UserProfile {
   id: string;
   email: string;
   stripeCustomerId?: string | null;
+  subscriptionProvider?: string | null;
   subscriptionStatus: string;
   subscriptionEndDate?: string | null;
   isFoundingMember: boolean;

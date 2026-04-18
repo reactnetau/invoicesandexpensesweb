@@ -15,6 +15,7 @@ export function useProfile() {
           id: p.id,
           email: p.email,
           stripeCustomerId: p.stripeCustomerId ?? null,
+          subscriptionProvider: (p as any).subscriptionProvider ?? null,
           subscriptionStatus: p.subscriptionStatus ?? 'inactive',
           subscriptionEndDate: p.subscriptionEndDate ?? null,
           isFoundingMember: p.isFoundingMember ?? false,

@@ -25,6 +25,8 @@ export function AccountPage() {
   const userIsPro = profile ? isPro(profile) : false;
   const isFoundingMember = profile?.isFoundingMember ?? false;
   const subscriptionStatus = profile?.subscriptionStatus ?? 'inactive';
+  const subscriptionProvider = profile?.subscriptionProvider ?? null;
+  const isMobileSubscription = subscriptionProvider === 'revenuecat';
 
   const handleUpgrade = async () => {
     setUpgradeLoading(true);
@@ -136,19 +138,25 @@ export function AccountPage() {
         ) : userIsPro ? (
           <div className="space-y-3">
             <p className="text-sm text-gray-600">You're on the Pro plan ($7/month). Manage your billing below.</p>
-            <div className="flex gap-3 flex-wrap">
-              <button onClick={handlePortal} disabled={portalLoading} className="btn-secondary">
-                <CreditCard className="w-4 h-4" />
-                {portalLoading ? 'Loading…' : 'Manage billing'}
-              </button>
-              <button
-                onClick={() => setCancelModal(true)}
-                disabled={cancelLoading}
-                className="btn-secondary !text-red-600 !border-red-200 hover:!bg-red-50"
-              >
-                {cancelLoading ? 'Cancelling…' : 'Cancel subscription'}
-              </button>
-            </div>
+            {isMobileSubscription ? (
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
+                Your subscription was started on iOS or Android. To cancel, open the app on your mobile device and manage your subscription there.
+              </div>
+            ) : (
+              <div className="flex gap-3 flex-wrap">
+                <button onClick={handlePortal} disabled={portalLoading} className="btn-secondary">
+                  <CreditCard className="w-4 h-4" />
+                  {portalLoading ? 'Loading…' : 'Manage billing'}
+                </button>
+                <button
+                  onClick={() => setCancelModal(true)}
+                  disabled={cancelLoading}
+                  className="btn-secondary !text-red-600 !border-red-200 hover:!bg-red-50"
+                >
+                  {cancelLoading ? 'Cancelling…' : 'Cancel subscription'}
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="space-y-3">
@@ -187,7 +195,7 @@ export function AccountPage() {
       <ConfirmModal
         open={cancelModal}
         title="Cancel subscription"
-        message="Your Pro access will continue until the end of the current billing period, then you'll revert to the free plan."
+        message="Your Pro access will continue until the end of the current billing period, then you'll revert to the free plan. Note: you can only cancel here because your subscription was started on the web."
         confirmLabel="Cancel subscription"
         loading={cancelLoading}
         onConfirm={handleCancel}
