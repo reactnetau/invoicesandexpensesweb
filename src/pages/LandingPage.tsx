@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FileText, Receipt, BarChart2, Mail, Check, ArrowRight, Zap, Star } from 'lucide-react';
 import { SEO } from '../components/SEO';
+import { CrossPlatformNote } from '../components/CrossPlatformNote';
 import { publicClient } from '../lib/api';
 
 const APP_URL = import.meta.env.VITE_APP_URL ?? '';
@@ -185,6 +186,10 @@ export function LandingPage() {
           </Link>
         </div>
         <p className="text-sm text-gray-400">No credit card required · 5 free invoices/month</p>
+
+        <div className="mx-auto mt-6 max-w-md">
+          <CrossPlatformNote />
+        </div>
 
         {foundingStatus && (
           <div className="mt-6 mx-auto max-w-md rounded-card border border-amber-200 bg-white p-4 shadow-card text-left">

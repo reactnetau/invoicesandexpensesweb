@@ -4,6 +4,7 @@ import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { enqueueSnackbar } from 'notistack';
 import { SEO } from '../components/SEO';
+import { CrossPlatformNote } from '../components/CrossPlatformNote';
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -36,6 +37,9 @@ export function LoginPage() {
       <SEO title="Sign In" canonical="/login" />
       <h1 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h1>
       <p className="text-sm text-gray-500 mb-6">Sign in to your account</p>
+      <div className="mb-6">
+        <CrossPlatformNote />
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

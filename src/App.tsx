@@ -24,6 +24,8 @@ import { LandingPage } from './pages/LandingPage';
 import { PublicInvoicePage } from './pages/PublicInvoicePage';
 import { DeleteAccountPage } from './pages/DeleteAccountPage';
 import { SupportPage } from './pages/SupportPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { TermsPage } from './pages/TermsPage';
 import { StripeSuccessPage } from './pages/StripeSuccessPage';
 import { StripeCancelPage } from './pages/StripeCancelPage';
 
@@ -55,6 +57,8 @@ function AppRoutes() {
       {/* Public utility pages */}
       <Route path="/delete-account" element={<DeleteAccountPage />} />
       <Route path="/support" element={<SupportPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/terms" element={<TermsPage />} />
       <Route path="/stripe-success" element={<StripeSuccessPage />} />
       <Route path="/stripe-cancel" element={<StripeCancelPage />} />
 
